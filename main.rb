@@ -8,4 +8,3 @@ require_relative 'lib/deck'
 
 Interface.run
 
-p interface

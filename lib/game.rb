@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 class Game
-  attr_accessor :player, :dealer, :deck, :bank, :name, :player_cards, :dealer_cards, :interface
+  attr_accessor :player, :dealer, :deck, :bank, :name, :player_cards, :dealer_cards, :interface, :winner
 
   def initialize
     @bank = 0
     @deck = Deck.new
     @player = Player.new
     @dealer = Dealer.new
+    @winner = winner
   end
 
   def place_a_bet
@@ -79,5 +80,16 @@ class Game
     else
       Interface.warning
     end
+  end
+
+  def open_cards
+    if @player.player_points > @dealer.dealer_points
+      @winner = @player.name
+    elsif @player.player_points < @dealer.dealer_points
+      @winner = 'Дилер'
+    else
+      @winner = 'Ничья'
+    end
+      @winner
   end
 end
