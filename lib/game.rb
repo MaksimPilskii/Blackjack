@@ -1,17 +1,19 @@
 # frozen_string_literal: true
 
 class Game
-  attr_accessor :player, :dealer, :deck, :bank, :name, :player_cards, :dealer_cards, :interface, :winner
+  attr_accessor :player, :dealer, :deck, :bank, :name, :player_cards, :dealer_cards, :interface, :winner, :player_points
 
   def initialize
     @bank = 0
     @deck = Deck.new
     @player = Player.new
     @dealer = Dealer.new
-    @winner = winner
+    @winner = ''
   end
 
   def place_a_bet
+    @player.player_cards = []
+    @dealer.dealer_cards = []
     @bank += 20
     @player.player_bank -= 10
     @dealer.dealer_bank -= 10
@@ -29,7 +31,7 @@ class Game
   def add_cards(player)
     @dealer.dealer_cards << deck.deck.sample if player == 'dealer'
     @player.player_cards << deck.deck.sample if player == 'player'
-    Interface.the_first_round
+    Interface.next_round
   end
 
   def scoring_points(cards, player_points, player)
@@ -58,8 +60,10 @@ class Game
     when 1
       skip_a_move
     when 2
+      skip_a_move if @dealer.dealer_cards.count < 2
       add_a_card
     when 3
+      skip_a_move if @dealer.dealer_cards.count < 2
       open_cards
     end
   end
@@ -70,7 +74,7 @@ class Game
       add_cards('dealer')
     else
       puts 'Компьютер пропускает ход'
-      Interface.the_first_round
+      Interface.next_round
     end
   end
 
@@ -82,14 +86,39 @@ class Game
     end
   end
 
+  def bank_player
+    @player.player_bank += @bank
+    @bank = 0
+  end
+
+  def return_the_bank
+    @player.player_bank += 10
+    @dealer.dealer_bank += 10
+    @bank = 0
+  end
+
+  def bank_dealer
+    @dealer.dealer_bank += @bank
+    @bank = 0
+  end
+
   def open_cards
-    if @player.player_points > @dealer.dealer_points
-      @winner = @player.name
-    elsif @player.player_points < @dealer.dealer_points
-      @winner = 'Дилер'
-    else
-      @winner = 'Ничья'
-    end
-      @winner
+    @winner = if @player.player_points > 21 && @dealer.dealer_points > 21
+                return_the_bank
+                'Никто не выиграл'
+              elsif @player.player_points > @dealer.dealer_points && @player.player_points < 22
+                bank_player
+                'Вы выиграли'
+              elsif @player.player_points < @dealer.dealer_points && @dealer.dealer_points < 22
+                bank_dealer
+                'Вы проиграли'
+              elsif @player.player_points > 21 && @dealer.dealer_points < 22
+                bank_dealer
+                'Вы проиграли'
+              else
+                'Ничья'
+              end
+    Interface.final
+    @winner
   end
 end
