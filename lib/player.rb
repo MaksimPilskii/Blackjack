@@ -1,8 +1,10 @@
 class Player
-  def initialize(name)
-    @name = name
-    @player_bank = 100.to_i
+  attr_accessor :name, :player_bank, :player_cards, :player_points
+  
+  def initialize
+    @name = Interface.add_name
+    @player_bank = 100
     @player_cards = []
-    @player_points = 0.to_i
+    @player_points = 0 
   end
 end

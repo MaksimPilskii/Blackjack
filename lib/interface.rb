@@ -1,15 +1,12 @@
 class Interface
-
-  def initialize
-    
-  end
-
-  def self.run
-    puts "Введите свое имя "
+  attr_accessor :player, :dealer, :game, :name, :deck
+  
+  def self.add_name
+    puts "Введите ваше имя"
     @name = gets.chomp
-    @player = Player.new(@name)
-    @dealer = Dealer.new
+  end
+  
+  def run
     @game = Game.new
   end
 end
-
