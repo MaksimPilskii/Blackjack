@@ -22,8 +22,4 @@ class Deck
     all_cards
     @deck = @all_cards
   end
-
-  def deck_for_counting
-    @all_cards << @all_cards
-  end
 end

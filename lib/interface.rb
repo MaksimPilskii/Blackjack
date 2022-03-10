@@ -8,5 +8,7 @@ class Interface
   
   def run
     @game = Game.new
+    @game.place_a_bet
+    @game.distribution_of_cards
   end
 end
