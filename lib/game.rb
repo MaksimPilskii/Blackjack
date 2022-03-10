@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Game
-  attr_accessor :player, :dealer, :deck, :bank, :name, :player_cards, :dealer_cards
+  attr_accessor :player, :dealer, :deck, :bank, :name, :player_cards, :dealer_cards, :interface
 
   def initialize
     @bank = 0
@@ -23,6 +23,12 @@ class Game
       @dealer.dealer_cards << deck.deck.sample
     end
     scoring_points(player.player_cards, player.player_points, player)
+  end
+
+  def add_cards(player)
+    @dealer.dealer_cards << deck.deck.sample if player == 'dealer'
+    @player.player_cards << deck.deck.sample if player == 'player'
+    Interface.the_first_round
   end
 
   def scoring_points(cards, player_points, player)
@@ -54,6 +60,24 @@ class Game
       add_a_card
     when 3
       open_cards
+    end
+  end
+
+  def skip_a_move
+    if @dealer.dealer_points < 17
+      puts 'Компьютер взял еще одну карту'
+      add_cards('dealer')
+    else
+      puts 'Компьютер пропускает ход'
+      Interface.the_first_round
+    end
+  end
+
+  def add_a_card
+    if @player.player_cards.count < 3
+      add_cards('player')
+    else
+      Interface.warning
     end
   end
 end
