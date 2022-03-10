@@ -36,15 +36,24 @@ class Game
         player_points += 10
       when 13
         player_points += if player_points >= 17
-                    1
-                  else
-                    11
-                  end
+                           1
+                         else
+                           11
+                         end
       end
     end
-      @player.player_points += player_points if player == "player"
-      @dealer.dealer_points += player_points if player == "dealer"
+    @player.player_points += player_points if player == 'player'
+    @dealer.dealer_points += player_points if player == 'dealer'
+  end
+
+  def second_round(number)
+    case number
+    when 1
+      skip_a_move
+    when 2
+      add_a_card
+    when 3
+      open_cards
+    end
   end
 end
-
-
