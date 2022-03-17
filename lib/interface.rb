@@ -64,6 +64,7 @@ class Interface
   end
 
   def self.show_cards
+    Interface.get_scoring
     puts "Карты Дилера: #{@game.dealer.dealer_cards}, набрано #{@game.dealer.dealer_points}"
     puts "Карты  #{@game.player.player_cards}, набрано #{@game.player.player_points}"
     puts "Результат #{@game.winner}"

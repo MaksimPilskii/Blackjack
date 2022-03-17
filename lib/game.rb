@@ -103,10 +103,14 @@ class Game
   end
 
   def open_cards
+    Interface.get_scoring
     @winner = if @player.player_points > 21 && @dealer.dealer_points > 21
                 return_the_bank
                 'Никто не выиграл'
               elsif @player.player_points > @dealer.dealer_points && @player.player_points < 22
+                bank_player
+                'Вы выиграли'
+              elsif @player.player_points < @dealer.dealer_points && @dealer.dealer_points > 21
                 bank_player
                 'Вы выиграли'
               elsif @player.player_points < @dealer.dealer_points && @dealer.dealer_points < 22

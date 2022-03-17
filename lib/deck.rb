@@ -1,20 +1,16 @@
-# frozen_string_literal: true
-
 class Deck
-  attr_accessor :deck, :all_cards
-
-  CARDS = %w[2 3 4 5 6 7 8 9 10 J L K A].freeze
-  SUITS = %w[+ <3 ^ <>].freeze
+  attr_accessor :deck, :all_cards, :suit, :value
 
   def initialize
     @deck = []
+    @card = Card.new
     @all_cards = []
     new_deck
   end
 
   def all_cards
-    SUITS.each do |suit|
-      CARDS.each do |card|
+    @card.suit.each do |suit|
+      @card.value.each do |card|
         @all_cards << "#{card}#{suit}"
       end
     end
