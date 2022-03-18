@@ -8,10 +8,16 @@ class Interface
     @name = gets.chomp
   end
 
+  def self.watch_cards(cards)
+    cards.each do |card|
+      print " #{card.value}#{card.suit} "
+    end
+  end
+
   def self.run
     @game = Game.new
     @game.place_a_bet
-    Interface.the_first_round
+    the_first_round
   end
 
   def self.get_scoring
@@ -22,16 +28,18 @@ class Interface
   end
 
   def self.the_first_round
-    Interface.get_scoring
+    get_scoring
     puts
-    puts <<~END
-      Игрок: #{@game.player.name}              Банк игрока: #{@game.player.player_bank}, Карты игрока: #{@game.player.player_cards}
-      Очки игрока: #{@game.player.player_points}
-      Дилер: Компьютер         Банк дилера: #{@game.dealer.dealer_bank}, Карты дилера: "***"
-      Банк: #{@game.bank}
-    END
+    puts "Игрок: #{@game.player.name} "
+    print "Банк игрока: #{@game.player.player_bank} "
+    print ', карты игрока: '
+    watch_cards(@game.player.player_cards)
+    puts ",очки игрока: #{@game.player.player_points}"
+    puts 'Дилер: Компьютер '
+    puts "Банк дилера: #{@game.dealer.dealer_bank}, карты дилера: \"***\""
+    puts "Банк: #{@game.bank}"
     puts
-    Interface.selection_menu
+    selection_menu
   end
 
   def self.selection_menu
@@ -48,35 +56,40 @@ class Interface
 
   def self.warning
     puts 'Вы не можете больше брать карт'
-    Interface.the_first_round
+    the_first_round
   end
 
   def self.next_round
     if @game.player.player_cards.count > 2 && @game.dealer.dealer_cards.count > 2
       @game.open_cards
     else
-      Interface.the_first_round
+      the_first_round
     end
   end
 
   def self.final
-    Interface.show_cards
+    show_cards
   end
 
   def self.show_cards
-    Interface.get_scoring
-    puts "Карты Дилера: #{@game.dealer.dealer_cards}, набрано #{@game.dealer.dealer_points}"
-    puts "Карты  #{@game.player.player_cards}, набрано #{@game.player.player_points}"
+    get_scoring
+    puts
+    print 'Карты Дилера: '
+    watch_cards(@game.dealer.dealer_cards)
+    puts "набрано: #{@game.dealer.dealer_points}"
+    print 'Ваши карты: '
+    watch_cards(@game.player.player_cards)
+    puts "набрано #{@game.player.player_points}"
     puts "Результат #{@game.winner}"
     puts 'Для продолжения игры нажмите 1, если хотите выйти, нажмите 0'
     choice = gets.to_i
-    Interface.continue_the_game(choice)
+    continue_the_game(choice)
   end
 
   def self.continue_the_game(choice)
     if choice == 1
       @game.place_a_bet
-      Interface.the_first_round
+      the_first_round
     end
   end
 end

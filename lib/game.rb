@@ -22,8 +22,8 @@ class Game
 
   def distribution_of_cards
     2.times do
-      @player.player_cards << deck.deck.sample
-      @dealer.dealer_cards << deck.deck.sample
+      @player.player_cards << @deck.deck.sample
+      @dealer.dealer_cards << @deck.deck.sample
     end
     scoring_points(player.player_cards, player.player_points, player)
   end
